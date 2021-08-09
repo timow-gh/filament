@@ -199,16 +199,16 @@ add_definitions(-DSYSTRACE_TAG=2 )
 # ==================================================================================================
 # Includes & target definition
 # ==================================================================================================
-# specify where our headers are
-include_directories(${PUBLIC_HDR_DIR})
-include_directories(src)
-include_directories(${GENERATION_ROOT})
 
-# we're building a library
-add_library(${TARGET} STATIC ${PRIVATE_HDRS} ${PUBLIC_HDRS} ${SRCS})
+add_library(${TARGET} ${PRIVATE_HDRS} ${PUBLIC_HDRS} ${SRCS})
 
-# specify where the public headers of this library are
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
+# Set include directories on a per target basis
+target_include_directories(${TARGET}
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+        PRIVATE
+        $<BUILD_INTERFACE:${GENERATION_ROOT}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src>)
 
 # ==================================================================================================
 # Expose a header-only target to minimize dependencies.
@@ -216,6 +216,17 @@ target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
 
 add_library(${TARGET}_headers INTERFACE)
 target_include_directories(${TARGET}_headers INTERFACE ${PUBLIC_HDR_DIR})
+
+# ==================================================================================================
+# Install backend headers
+# ==================================================================================================
+install(DIRECTORY ${PUBLIC_HDR_DIR}/backend DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+install(TARGETS ${TARGET}
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # ==================================================================================================
 # Build SPIRV snippets used by the Vulkan backend.
@@ -255,6 +266,11 @@ set(DUMMY_SRC "${VKSHADERS_DIR}/dummy.c")
 add_custom_command(OUTPUT ${DUMMY_SRC} COMMAND echo "//" > ${DUMMY_SRC})
 
 add_library(vkshaders STATIC ${DUMMY_SRC} ${RESGEN_SOURCE})
+
+# ==================================================================================================
+# Installation
+# ==================================================================================================
+install(TARGETS vkshaders ${INSTALL_TYPE} DESTINATION lib/${DIST_DIR})
 
 # ==================================================================================================
 # Dependencies
@@ -350,14 +366,6 @@ endif()
 target_link_libraries(${TARGET} PRIVATE
         $<$<AND:$<PLATFORM_ID:Linux>,$<CONFIG:Release>>:${LINUX_LINKER_OPTIMIZATION_FLAGS}>
 )
-
-# ==================================================================================================
-# Installation
-# ==================================================================================================
-set(INSTALL_TYPE ARCHIVE)
-install(TARGETS ${TARGET} ${INSTALL_TYPE} DESTINATION lib/${DIST_DIR})
-install(TARGETS vkshaders ${INSTALL_TYPE} DESTINATION lib/${DIST_DIR})
-install(DIRECTORY ${PUBLIC_HDR_DIR}/backend DESTINATION include)
 
 # ==================================================================================================
 # Test

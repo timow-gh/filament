@@ -30,20 +30,22 @@ else()
     message(FATAL_ERROR "Platform not supported. BlueGL supports Windows, Linux, and MacOS X.")
 endif()
 
-# specify where our headers are
-include_directories(${PUBLIC_HDR_DIR})
-
 # we're building a library
-add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
-
-# specify where the public headers of this library are
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
+add_library(${TARGET} ${PUBLIC_HDRS} ${SRCS})
+target_include_directories(${TARGET}
+        PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+        PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src>)
 
 if (WIN32)
     target_link_libraries(${TARGET} PRIVATE opengl32 gdi32)
 endif()
 
-install(TARGETS ${TARGET} ARCHIVE DESTINATION lib/${DIST_DIR})
+install(TARGETS ${TARGET}
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # Build the tests...
 add_executable(test_${TARGET}

@@ -19,13 +19,9 @@ else()
     message(FATAL_ERROR "Platform not supported. BlueVK supports Linux, Android, MacOS X, and Windows.")
 endif()
 
-include_directories(${PUBLIC_HDR_DIR})
-
-add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
-
+add_library(${TARGET} ${PUBLIC_HDRS} ${SRCS})
+target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>)
 target_link_libraries(${TARGET} utils math)
-
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
 
 # test_bluevk is not supported on mobile or Windows
 if (NOT ANDROID AND NOT IOS AND NOT WIN32)
@@ -33,4 +29,9 @@ if (NOT ANDROID AND NOT IOS AND NOT WIN32)
     target_link_libraries(test_bluevk PRIVATE dl bluevk sdl2)
 endif()
 
-install(TARGETS ${TARGET} ARCHIVE DESTINATION lib/${DIST_DIR})
+install(TARGETS ${TARGET}
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

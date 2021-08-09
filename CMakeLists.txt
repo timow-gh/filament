@@ -596,6 +596,10 @@ endfunction()
 # Sub-projects
 # ==================================================================================================
 
+include(GNUInstallDirs)
+list(APPEND CMAKE_MODULE_PATH ${TNT_SOURCE_DIR}/build/cmake)
+include(InstallConfigHelper)
+
 # Common to all platforms
 add_subdirectory(${EXTERNAL}/libgtest/tnt)
 add_subdirectory(${LIBRARIES}/camutils)
@@ -686,6 +690,10 @@ if (IS_HOST_PLATFORM)
     add_subdirectory(${TOOLS}/roughness-prefilter)
     add_subdirectory(${TOOLS}/specular-color)
 endif()
+
+set(PROJ_CONFIG_NAME "Filament")
+set(EXPORT_SET_NAME "filamentTargetsExportSet")
+setupExportSetInstall(${PROJ_CONFIG_NAME} ${EXPORT_SET_NAME})
 
 # Generate exported executables for cross-compiled builds (Android, WebGL, and iOS)
 if (NOT CMAKE_CROSSCOMPILING)
