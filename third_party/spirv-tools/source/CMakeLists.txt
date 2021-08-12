@@ -365,13 +365,13 @@ endfunction()
 # Always build ${SPIRV_TOOLS}-shared. This is expected distro packages, and
 # unlike the other SPIRV_TOOLS target, defaults to hidden symbol visibility.
 # Filament specific changes
-# add_library(${SPIRV_TOOLS}-shared SHARED ${SPIRV_SOURCES})
-# spirv_tools_default_target_options(${SPIRV_TOOLS}-shared)
-# set_target_properties(${SPIRV_TOOLS}-shared PROPERTIES CXX_VISIBILITY_PRESET hidden)
-# target_compile_definitions(${SPIRV_TOOLS}-shared
-#   PRIVATE SPIRV_TOOLS_IMPLEMENTATION
-#   PUBLIC SPIRV_TOOLS_SHAREDLIB
-# )
+ add_library(${SPIRV_TOOLS}-shared SHARED ${SPIRV_SOURCES})
+ spirv_tools_default_target_options(${SPIRV_TOOLS}-shared)
+ set_target_properties(${SPIRV_TOOLS}-shared PROPERTIES CXX_VISIBILITY_PRESET hidden)
+ target_compile_definitions(${SPIRV_TOOLS}-shared
+   PRIVATE SPIRV_TOOLS_IMPLEMENTATION
+   PUBLIC SPIRV_TOOLS_SHAREDLIB
+ )
 # End Filament specific changes
 
 if(SPIRV_TOOLS_BUILD_STATIC)

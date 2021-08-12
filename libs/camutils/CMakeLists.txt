@@ -26,11 +26,11 @@ set(SRCS
 # ==================================================================================================
 include_directories(${PUBLIC_HDR_DIR})
 
-add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+add_library(${TARGET} ${PUBLIC_HDRS} ${SRCS})
 
 target_link_libraries(${TARGET} PUBLIC math)
 
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
+target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>)
 
 # ==================================================================================================
 # Compiler flags
@@ -45,8 +45,13 @@ endif()
 # ==================================================================================================
 # Installation
 # ==================================================================================================
-install(TARGETS ${TARGET} ARCHIVE DESTINATION lib/${DIST_DIR})
 install(DIRECTORY ${PUBLIC_HDR_DIR}/camutils DESTINATION include)
+install(TARGETS ${TARGET}
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # ==================================================================================================
 # Tests

@@ -124,15 +124,14 @@ add_library(filamentapp-resources ${DUMMY_SRC} ${RESGEN_SOURCE})
 # ==================================================================================================
 # Include and target definitions
 # ==================================================================================================
-
-include_directories(${PUBLIC_HDR_DIR})
-
-add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+add_library(${TARGET} ${PUBLIC_HDRS} ${SRCS})
 
 target_link_libraries(${TARGET} PUBLIC ${LIBS} filamentapp-resources)
 
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
-target_include_directories(${TARGET} PRIVATE ${GENERATION_ROOT})
+target_include_directories(${TARGET}
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+        $<BUILD_INTERFACE:${GENERATION_ROOT}>)
 
 # ==================================================================================================
 # Compiler flags

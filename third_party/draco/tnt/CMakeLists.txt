@@ -561,7 +561,13 @@ endforeach()
 draco_generate_features_h()
 
 target_include_directories(dracodec
-    PUBLIC "${draco_build_dir}"
-    PUBLIC "${draco_root}/src")
+    PUBLIC
+    $<BUILD_INTERFACE:${draco_build_dir}>
+    $<BUILD_INTERFACE:${draco_root}/src>)
 
-install(TARGETS dracodec ARCHIVE DESTINATION lib/${DIST_DIR})
+install(TARGETS dracodec
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

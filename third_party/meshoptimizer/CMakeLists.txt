@@ -19,8 +19,8 @@ set(SOURCES
     src/vfetchoptimizer.cpp
 )
 
-add_library(meshoptimizer STATIC ${SOURCES})
-target_include_directories(meshoptimizer INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+add_library(meshoptimizer ${SOURCES})
+target_include_directories(meshoptimizer PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
 
 if(MSVC)
 	target_compile_options(meshoptimizer PRIVATE /W4 /WX)
@@ -33,4 +33,9 @@ if(BUILD_DEMO)
     target_link_libraries(demo meshoptimizer)
 endif()
 
-install(TARGETS meshoptimizer ARCHIVE DESTINATION lib/${DIST_DIR})
+install(TARGETS meshoptimizer
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

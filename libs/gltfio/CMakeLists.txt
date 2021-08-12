@@ -162,25 +162,24 @@ add_library(gltfio_resources_lite ${DUMMY_SRC} ${RESGEN_SOURCE})
 # ==================================================================================================
 # Build the "core" library (no filamat)
 # ==================================================================================================
-
-include_directories(${PUBLIC_HDR_DIR} ${RESOURCE_DIR})
-link_libraries(math utils filament cgltf stb geometry gltfio_resources tsl trie)
-
-add_library(gltfio_core STATIC ${PUBLIC_HDRS} ${SRCS})
-
-target_include_directories(gltfio_core PUBLIC ${PUBLIC_HDR_DIR})
-
+add_library(gltfio_core ${PUBLIC_HDRS} ${SRCS})
+target_include_directories(gltfio_core
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+        $<BUILD_INTERFACE:${RESOURCE_DIR}>)
 target_compile_definitions(gltfio_core PUBLIC -DGLTFIO_DRACO_SUPPORTED=1)
-target_link_libraries(gltfio_core PUBLIC dracodec)
+target_link_libraries(gltfio_core
+        PUBLIC dracodec math utils filament cgltf stb geometry gltfio_resources tsl trie)
 
 if (NOT WEBGL AND NOT ANDROID AND NOT IOS)
 
     # ==================================================================================================
     # Link the core library with additional dependencies to create the "full" library
     # ==================================================================================================
-    add_library(${TARGET} STATIC ${PUBLIC_HDRS} src/MaterialGenerator.cpp)
-    target_link_libraries(${TARGET} PUBLIC filamat gltfio_core)
-    target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
+    add_library(${TARGET} ${PUBLIC_HDRS} src/MaterialGenerator.cpp)
+    target_link_libraries(${TARGET}
+            PUBLIC filamat gltfio_core math utils filament cgltf stb geometry gltfio_resources tsl trie)
+    target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>)
 
     # ==================================================================================================
     # Compiler flags
@@ -195,14 +194,21 @@ if (NOT WEBGL AND NOT ANDROID AND NOT IOS)
     # ==================================================================================================
     # Installation
     # ==================================================================================================
-    install(TARGETS ${TARGET} gltfio_core gltfio_resources gltfio_resources_lite ARCHIVE DESTINATION lib/${DIST_DIR})
     install(DIRECTORY ${PUBLIC_HDR_DIR}/gltfio DESTINATION include)
-
+    install(TARGETS ${TARGET} gltfio_core gltfio_resources gltfio_resources_lite
+            EXPORT filamentTargetsExportSet
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 else()
-
-    install(TARGETS gltfio_core gltfio_resources gltfio_resources_lite ARCHIVE DESTINATION lib/${DIST_DIR})
+    install(TARGETS gltfio_core gltfio_resources gltfio_resources_lite
+            EXPORT filamentTargetsExportSet
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
     install(DIRECTORY ${PUBLIC_HDR_DIR}/gltfio DESTINATION include)
     install(FILES ${RESOURCE_DIR}/gltfresources.h DESTINATION include/gltfio/resources)
     install(FILES ${LITE_DIR}/gltfresources_lite.h DESTINATION include/gltfio/resources)
-
 endif()

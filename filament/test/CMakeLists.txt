@@ -47,6 +47,8 @@ if (TNT_DEV)
             filament_framegraph_test.cpp
             filament_test.cpp)
 
+    target_include_directories(test_${TARGET} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../src>)
+
     target_link_libraries(test_${TARGET} PRIVATE filament gtest)
     target_compile_options(test_${TARGET} PRIVATE ${COMPILER_FLAGS})
 
@@ -60,3 +62,4 @@ add_executable(test_material_parser
 target_link_libraries(test_material_parser PRIVATE filament gtest)
 target_compile_options(test_material_parser PRIVATE ${COMPILER_FLAGS})
 target_include_directories(test_material_parser PRIVATE ${RESOURCE_DIR})
+target_include_directories(test_material_parser PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../src>)

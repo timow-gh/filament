@@ -82,22 +82,23 @@ set(LITE_SRCS
 # ==================================================================================================
 # Include and target definitions
 # ==================================================================================================
-include_directories(${PUBLIC_HDR_DIR})
-include_directories(${CMAKE_BINARY_DIR})
-
 # Filamat
-add_library(${TARGET} STATIC ${HDRS} ${PRIVATE_HDRS} ${SRCS})
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
+add_library(${TARGET} ${HDRS} ${PRIVATE_HDRS} ${SRCS})
+target_include_directories(${TARGET}
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+        PRIVATE
+        ${spirv-tools_SOURCE_DIR}/include)
 target_link_libraries(${TARGET} shaders filabridge utils smol-v)
 
 # Filamat Lite
-add_library(filamat_lite STATIC ${HDRS} ${LITE_PRIVATE_HDRS} ${LITE_SRCS})
-target_include_directories(filamat_lite PUBLIC ${PUBLIC_HDR_DIR})
+add_library(filamat_lite ${HDRS} ${LITE_PRIVATE_HDRS} ${LITE_SRCS})
+target_include_directories(filamat_lite
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>)
 target_link_libraries(filamat_lite shaders filabridge utils)
-
-# We are being naughty and accessing private headers here
-# For spirv-tools, we're just following glslang's example
-target_include_directories(${TARGET} PRIVATE ${spirv-tools_SOURCE_DIR}/include)
 
 # glslang libraries have circular dependencies. To make sure the proper object are part of the link
 # we need to force archive re-scan on new symbol dependencies via start/end-group.
@@ -150,7 +151,31 @@ set(FILAMAT_LIB_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}filamat${CMAKE_STATIC_LIBRARY
 install(FILES "${FILAMAT_COMBINED_OUTPUT}" DESTINATION lib/${DIST_DIR} RENAME ${FILAMAT_LIB_NAME})
 install(DIRECTORY ${PUBLIC_HDR_DIR}/filamat DESTINATION include)
 
-install(TARGETS filamat_lite ARCHIVE DESTINATION lib/${DIST_DIR})
+
+set(spirv_tools_lib "")
+if(BUILD_SHARED_LIBS)
+    set(spirv_tools_lib "SPIRV-Tools-shared")
+else()
+    set(spirv_tools_lib "SPIRV-Tools-static")
+endif()
+
+install(TARGETS
+        filamat
+        filamat_lite
+        glslang
+        SPIRV
+        SPVRemapper
+        SPIRV-Tools-opt
+        spirv-cross-msl
+        ${spirv_tools_lib}
+        OGLCompiler
+        OSDependent
+        EXPORT
+        filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # ==================================================================================================
 # Tests

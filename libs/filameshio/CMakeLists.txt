@@ -18,9 +18,8 @@ set(SRCS src/MeshReader.cpp)
 # ==================================================================================================
 # Includes and target definition
 # ==================================================================================================
-include_directories(${PUBLIC_HDR_DIR})
-add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
+add_library(${TARGET} ${PUBLIC_HDRS} ${SRCS})
+target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>)
 target_link_libraries(${TARGET}
     PRIVATE meshoptimizer
     PUBLIC filament # Public only because the filamesh API needs Box.h
@@ -30,8 +29,13 @@ target_link_libraries(${TARGET}
 # Installation
 # ==================================================================================================
 set(INSTALL_TYPE ARCHIVE)
-install(TARGETS ${TARGET} ${INSTALL_TYPE} DESTINATION lib/${DIST_DIR})
 install(FILES ${DIST_HDRS} DESTINATION include/${TARGET})
+install(TARGETS ${TARGET}
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # ==================================================================================================
 # Tests

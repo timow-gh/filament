@@ -86,12 +86,12 @@ set_property(TARGET glslang PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 glslang_add_build_info_dependency(glslang)
 
-set(PUBLIC_HEADER_FOLDERS
-        ../Include
-        ../Public
-        ../MachineIndependent)
+target_include_directories(glslang
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../Include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../Public>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../MachineIndependent>)
 
-target_include_directories(glslang PUBLIC ${PUBLIC_HEADER_FOLDERS})
 target_link_libraries(glslang OGLCompiler OSDependent)
 #if(ENABLE_HLSL)
 #    target_link_libraries(glslang HLSL)

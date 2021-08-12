@@ -105,11 +105,14 @@ endif()
 # ==================================================================================================
 # Include and target definitions
 # ==================================================================================================
-add_library(${TARGET} STATIC ${RESGEN_SOURCE})
-target_include_directories(${TARGET} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
-
+add_library(${TARGET} ${RESGEN_SOURCE})
+target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
 # ==================================================================================================
 # Installation
 # ==================================================================================================
-
-install(TARGETS ${TARGET} ARCHIVE DESTINATION lib/${DIST_DIR})
+install(TARGETS ${TARGET}
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

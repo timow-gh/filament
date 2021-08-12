@@ -9,8 +9,11 @@ set(PUBLIC_HDRS
     ${PUBLIC_HDR_DIR}/cgltf_write.h
     ${PUBLIC_HDR_DIR}/cgltf.h)
 
-include_directories(${PUBLIC_HDR_DIR})
-
 add_library(${TARGET} INTERFACE)
-target_sources(${TARGET} INTERFACE ${PUBLIC_HDRS})
-target_include_directories(${TARGET} INTERFACE ${PUBLIC_HDR_DIR})
+target_include_directories(${TARGET} INTERFACE $<BUILD_INTERFACE:${PUBLIC_HDR_DIR}>)
+install(TARGETS ${TARGET}
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

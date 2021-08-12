@@ -64,13 +64,14 @@ add_library(matdbg_resources ${DUMMY_SRC} ${RESGEN_SOURCE})
 # ==================================================================================================
 # Include and target definitions
 # ==================================================================================================
-
-include_directories(${PUBLIC_HDR_DIR} ${RESOURCE_DIR})
-
 add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+target_include_directories(${TARGET}
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+        $<BUILD_INTERFACE:${RESOURCE_DIR}>
+        PRIVATE $<BUILD_INTERFACE:${filamat_SOURCE_DIR}/src> )
 
 target_link_libraries(${TARGET} PUBLIC
-        backend_headers
         civetweb
         filabridge
         filaflat
@@ -81,12 +82,7 @@ target_link_libraries(${TARGET} PUBLIC
         spirv-cross-glsl
         SPIRV-Tools
         utils
-        utils
 )
-
-target_include_directories(${TARGET} PRIVATE ${filamat_SOURCE_DIR}/src)
-
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
 
 # ==================================================================================================
 # Compiler flags
@@ -121,3 +117,9 @@ combine_static_libs(matdbg "${MATDBG_COMBINED_OUTPUT}" "${MATDBG_DEPS}")
 set(MATDBG_LIB_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}matdbg${CMAKE_STATIC_LIBRARY_SUFFIX})
 install(FILES "${MATDBG_COMBINED_OUTPUT}" DESTINATION lib/${DIST_DIR} RENAME ${MATDBG_LIB_NAME})
 install(DIRECTORY ${PUBLIC_HDR_DIR}/matdbg DESTINATION include)
+install(TARGETS ${TARGET} matdbg_resources civetweb spirv-cross-core spirv-cross-glsl ${SPIRV_TOOLS}
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

@@ -75,14 +75,12 @@ list(APPEND RESGEN_SOURCE ${DUMMY_SRC})
 # ==================================================================================================
 # Include and target definitions
 # ==================================================================================================
-include_directories(${PUBLIC_HDR_DIR})
-include_directories(${GENERATION_ROOT})
-
-add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS} ${RESGEN_SOURCE})
-
+add_library(${TARGET} ${PUBLIC_HDRS} ${SRCS} ${RESGEN_SOURCE})
 target_link_libraries(${TARGET} PUBLIC imgui filament)
-
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
+target_include_directories(${TARGET}
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+        $<BUILD_INTERFACE:${GENERATION_ROOT}>)
 
 # ==================================================================================================
 # Compiler flags
