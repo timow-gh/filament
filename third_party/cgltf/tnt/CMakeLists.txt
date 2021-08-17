@@ -12,5 +12,5 @@ set(PUBLIC_HDRS
 include_directories(${PUBLIC_HDR_DIR})
 
 add_library(${TARGET} INTERFACE)
-target_sources(${TARGET} INTERFACE ${PUBLIC_HDRS})
-target_include_directories(${TARGET} INTERFACE ${PUBLIC_HDR_DIR})
+target_include_directories(${TARGET} INTERFACE $<BUILD_INTERFACE:${PUBLIC_HDR_DIR}>)
+

@@ -40,7 +40,7 @@ endif()
 set(MODULE_LICENSES getopt libassimp meshoptimizer)
 set(GENERATION_ROOT ${CMAKE_CURRENT_BINARY_DIR}/generated)
 list_licenses(${GENERATION_ROOT}/licenses/licenses.inc ${MODULE_LICENSES})
-target_include_directories(${TARGET} PRIVATE ${GENERATION_ROOT})
+target_include_directories(${TARGET} PRIVATE $<BUILD_INTERFACE:${GENERATION_ROOT}> )
 
 # ==================================================================================================
 # Installation

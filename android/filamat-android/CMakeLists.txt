@@ -43,7 +43,7 @@ include_directories(${FILAMENT_DIR}/include)
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} -Wl,--version-script=${CMAKE_SOURCE_DIR}/libfilamat-jni.map")
 
 add_library(filamat-jni SHARED src/main/cpp/MaterialBuilder.cpp)
-target_include_directories(filamat-jni PRIVATE ${FILAMAT_INCLUDE_DIRS})
+target_include_directories(filamat-jni PRIVATE $<BUILD_INTERFACE:${FILAMAT_INCLUDE_DIRS}>)
 
 target_link_libraries(filamat-jni
         ${FILAMAT_FLAVOR}

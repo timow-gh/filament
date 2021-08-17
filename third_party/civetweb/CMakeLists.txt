@@ -455,9 +455,9 @@ else()
 
   zephyr_interface_library_named(CIVETWEB)
 
-  target_include_directories(CIVETWEB INTERFACE src)
-  target_include_directories(CIVETWEB INTERFACE include)
-  target_include_directories(CIVETWEB INTERFACE ${CMAKE_SOURCE_DIR}/src)
+  target_include_directories(CIVETWEB INTERFACE $<BUILD_INTERFACE:src>)
+  target_include_directories(CIVETWEB INTERFACE $<BUILD_INTERFACE:include>)
+  target_include_directories(CIVETWEB INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>)
 
   zephyr_include_directories(include)
 

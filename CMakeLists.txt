@@ -635,6 +635,10 @@ endfunction()
 # Sub-projects
 # ==================================================================================================
 
+include(GNUInstallDirs)
+list(APPEND CMAKE_MODULE_PATH ${TNT_SOURCE_DIR}/build/cmake)
+include(InstallConfigHelper)
+
 # Common to all platforms
 add_subdirectory(${EXTERNAL}/libgtest/tnt)
 add_subdirectory(${LIBRARIES}/camutils)
@@ -724,6 +728,22 @@ if (IS_HOST_PLATFORM)
     add_subdirectory(${TOOLS}/specular-color)
     add_subdirectory(${TOOLS}/uberz)
 endif()
+
+install(TARGETS
+        math matdbg meshoptimizer cgltf stb geometry tsl trie filamat
+        dracodec filaflat filabridge ibl-lite shaders backend_headers
+        civetweb glslang matdbg_resources SPIRV spirv-cross-glsl SPIRV-Tools-static
+        smol-v SPVRemapper SPIRV-Tools-opt OGLCompiler OSDependent spirv-cross-msl
+        spirv-cross-core
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+set(PROJ_CONFIG_NAME "Filament")
+set(EXPORT_SET_NAME "filamentTargetsExportSet")
+setupExportSetInstall(${PROJ_CONFIG_NAME} ${EXPORT_SET_NAME})
 
 # Generate exported executables for cross-compiled builds (Android, WebGL, and iOS)
 if (NOT CMAKE_CROSSCOMPILING)

@@ -131,8 +131,8 @@ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
 
 target_link_libraries(${TARGET} PUBLIC ${LIBS} filamentapp-resources)
 
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
-target_include_directories(${TARGET} PRIVATE ${GENERATION_ROOT})
+target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>)
+target_include_directories(${TARGET} PRIVATE $<BUILD_INTERFACE:${GENERATION_ROOT}>)
 
 # ==================================================================================================
 # Compiler flags

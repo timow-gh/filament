@@ -20,7 +20,7 @@ set(SOURCES
 )
 
 add_library(meshoptimizer STATIC ${SOURCES})
-target_include_directories(meshoptimizer INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_include_directories(meshoptimizer INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
 
 if(MSVC)
 	target_compile_options(meshoptimizer PRIVATE /W4 /WX)

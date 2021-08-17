@@ -59,7 +59,8 @@ endmacro()
 macro(spirv_cross_add_library name config_name)
   add_library(${name} ${ARGN})
   extract_headers(hdrs "${ARGN}")
-  target_include_directories(${name} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
+  target_include_directories(${name} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)
+
   set_target_properties(${name} PROPERTIES
       PUBLIC_HEADERS "${hdrs}")
   target_compile_options(${name} PRIVATE ${spirv-compiler-options})

@@ -193,7 +193,7 @@ include_directories(
 add_definitions(-D_THREAD_SAFE)
 
 # we're building a library
-add_library(${TARGET} STATIC ${SRCS})
+add_library(${TARGET} ${SRCS})
 
 # libraries we're linking against
 target_link_libraries(${TARGET} ${EXTRA_LIBS})
@@ -209,7 +209,7 @@ if(NOT MSVC)
 endif()
 
 # specify where the public headers of this library are
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
+target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${PUBLIC_HDR_DIR}>)
 
 if (WIN32)
     # Windows needs a WinMain static library.
@@ -228,3 +228,9 @@ else()
     target_compile_definitions(${TARGET} PRIVATE SDL_ATOMIC_DISABLED=1)
 endif()
 
+install(TARGETS ${TARGET}
+        EXPORT filamentTargetsExportSet
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

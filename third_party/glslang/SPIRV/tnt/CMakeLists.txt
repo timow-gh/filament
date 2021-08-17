@@ -36,8 +36,9 @@ if(ENABLE_NV_EXTENSIONS)
 endif(ENABLE_NV_EXTENSIONS)
 
 add_library(SPIRV STATIC ${SOURCES} ${HEADERS})
-target_include_directories(SPIRV PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
-target_include_directories(SPIRV PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+target_include_directories(SPIRV PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)
+target_include_directories(SPIRV PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../..>)
+
 set_property(TARGET SPIRV PROPERTY FOLDER glslang)
 set_property(TARGET SPIRV PROPERTY POSITION_INDEPENDENT_CODE ON)
 
@@ -45,9 +46,10 @@ glslang_add_build_info_dependency(SPIRV)
 
 if(ENABLE_OPT)
     target_include_directories(SPIRV
-            PRIVATE ${spirv-tools_SOURCE_DIR}/include
-            PRIVATE ${spirv-tools_SOURCE_DIR}/source
-            )
+            PRIVATE
+            $<BUILD_INTERFACE:${spirv-tools_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${spirv-tools_SOURCE_DIR}/source>)
+
     target_link_libraries(SPIRV glslang SPIRV-Tools-opt)
 else()
     target_link_libraries(SPIRV glslang)

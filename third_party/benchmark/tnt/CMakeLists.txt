@@ -39,9 +39,9 @@ if (LINUX)
 endif()
 
 # specify where the public headers of this library are
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
+target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${PUBLIC_HDR_DIR}>)
 
 # Benchmark main library
 add_library(${TARGET}_main ${SRC_DIR}/benchmark_main.cc)
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
+target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${PUBLIC_HDR_DIR}>)
 target_link_libraries(${TARGET}_main benchmark)

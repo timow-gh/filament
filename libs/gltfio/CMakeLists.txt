@@ -153,7 +153,7 @@ target_include_directories(uberarchive PUBLIC ${RESOURCE_DIR})
 include_directories(${PUBLIC_HDR_DIR} ${RESOURCE_DIR})
 link_libraries(math utils filament cgltf stb ktxreader geometry tsl trie uberzlib)
 
-add_library(gltfio_core STATIC ${PUBLIC_HDRS} ${SRCS})
+add_library(gltfio_core ${PUBLIC_HDRS} ${SRCS})
 
 target_include_directories(gltfio_core PUBLIC ${PUBLIC_HDR_DIR})
 
@@ -190,3 +190,31 @@ endif()
 install(TARGETS gltfio_core uberarchive ARCHIVE DESTINATION lib/${DIST_DIR})
 install(DIRECTORY ${PUBLIC_HDR_DIR}/gltfio DESTINATION include)
 install(FILES ${RESOURCE_DIR}/materials/uberarchive.h DESTINATION include/gltfio/materials)
+
+## ==================================================================================================
+## Installation
+## ==================================================================================================
+#install(TARGETS ${TARGET} gltfio_core gltfio_resources gltfio_resources_lite
+#        EXPORT filamentTargetsExportSet
+#        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+#        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+#        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+#        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+## The Image.h header is only needed within Filament and does not need to be distributed.
+#install(DIRECTORY ${PUBLIC_HDR_DIR}/gltfio
+#        DESTINATION include
+#        PATTERN "Image.h" EXCLUDE)
+#else()
+#install(TARGETS gltfio_core gltfio_resources gltfio_resources_lite
+#EXPORT filamentTargetsExportSet
+#RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+#LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+#ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
+#INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+## The Image.h header is only needed within Filament and does not need to be distributed.
+#install(DIRECTORY ${PUBLIC_HDR_DIR}/gltfio
+#DESTINATION include
+#PATTERN "Image.h" EXCLUDE)
+#install(FILES ${RESOURCE_DIR}/gltfresources.h DESTINATION include/gltfio/resources)
+#install(FILES ${LITE_DIR}/gltfresources_lite.h DESTINATION include/gltfio/resources)
+#endif()
