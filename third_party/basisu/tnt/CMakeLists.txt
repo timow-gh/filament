@@ -57,9 +57,9 @@ add_library(basis_transcoder ${TRANSCODER_SRC})
 target_link_libraries(basis_transcoder zstd)
 target_link_libraries(basis_encoder basis_transcoder)
 
-target_include_directories(zstd PUBLIC ../zstd)
-target_include_directories(basis_encoder PUBLIC ../encoder)
-target_include_directories(basis_transcoder PUBLIC ../transcoder)
+target_include_directories(zstd PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../zstd>)
+target_include_directories(basis_encoder PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../encoder>)
+target_include_directories(basis_transcoder PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../transcoder>)
 
 target_compile_definitions(basis_encoder PRIVATE ${BASIS_CONFIG})
 target_compile_definitions(basis_transcoder PRIVATE ${BASIS_CONFIG})
