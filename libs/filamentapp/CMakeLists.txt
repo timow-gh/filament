@@ -130,6 +130,13 @@ include_directories(${PUBLIC_HDR_DIR})
 add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
 
 target_link_libraries(${TARGET} PUBLIC ${LIBS} filamentapp-resources)
+if (LINUX)
+    if (FILAMENT_SUPPORTS_WAYLAND)
+        target_compile_definitions(${TARGET} PUBLIC -DFILAMENT_SUPPORTS_WAYLAND)
+    elseif(FILAMENT_SUPPORTS_X11)
+        target_compile_definitions(${TARGET} PUBLIC -DFILAMENT_SUPPORTS_X11)
+    endif()
+endif()
 
 target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>)
 target_include_directories(${TARGET} PRIVATE $<BUILD_INTERFACE:${GENERATION_ROOT}>)
