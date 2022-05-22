@@ -194,6 +194,12 @@ add_definitions(-D_THREAD_SAFE)
 
 # we're building a library
 add_library(${TARGET} ${SRCS})
+if (FILAMENT_SUPPORTS_WAYLAND)
+    target_compile_definitions(${TARGET} PUBLIC -DFILAMENT_SUPPORTS_WAYLAND)
+elseif(FILAMENT_SUPPORTS_X11)
+    target_compile_definitions(${TARGET} PUBLIC -DFILAMENT_SUPPORTS_X11)
+endif()
+
 
 # libraries we're linking against
 target_link_libraries(${TARGET} ${EXTRA_LIBS})
