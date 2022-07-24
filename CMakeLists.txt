@@ -732,7 +732,7 @@ install(TARGETS
         dracodec filaflat filabridge ibl-lite shaders backend_headers
         civetweb glslang matdbg_resources SPIRV spirv-cross-glsl SPIRV-Tools-static
         smol-v SPIRV-Tools-opt OGLCompiler OSDependent spirv-cross-msl
-        spirv-cross-core basis_transcoder ktxreader
+        spirv-cross-core basis_transcoder ktxreader zstd
         EXPORT filamentTargetsExportSet
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${DIST_DIR}
