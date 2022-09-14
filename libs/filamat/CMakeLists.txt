@@ -169,7 +169,7 @@ add_executable(${TARGET} ${SRCS})
 
 target_include_directories(${TARGET} PRIVATE src)
 
-target_link_libraries(${TARGET} filamat gtest)
+target_link_libraries(${TARGET} filamat tnt_gtest)
 
 set(TARGET test_filamat_lite)
 set(SRCS
@@ -179,4 +179,4 @@ add_executable(${TARGET} ${SRCS})
 
 target_include_directories(${TARGET} PRIVATE src)
 
-target_link_libraries(${TARGET} filamat_lite gtest)
+target_link_libraries(${TARGET} filamat_lite tnt_gtest)

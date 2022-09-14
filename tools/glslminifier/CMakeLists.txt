@@ -36,5 +36,5 @@ if (NOT ANDROID)
             tests/test_glslminifier.cpp
     )
     target_include_directories(test_${TARGET} PRIVATE src)
-    target_link_libraries(test_${TARGET} PRIVATE gtest)
+    target_link_libraries(test_${TARGET} PRIVATE tnt_gtest)
 endif()

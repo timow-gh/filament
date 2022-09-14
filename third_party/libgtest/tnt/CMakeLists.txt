@@ -3,7 +3,7 @@ project(gtest)
 
 set(OUR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
-set(TARGET              gtest)
+set(TARGET              tnt_gtest)
 set(SRC_DIR             ${OUR_DIR}/googletest/src)
 set(PUBLIC_HDR_DIR      ${OUR_DIR}/googletest/include)
 set(PRIVATE_HDR_DIR     ${OUR_DIR}/googletest)

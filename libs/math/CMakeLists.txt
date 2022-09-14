@@ -58,7 +58,7 @@ add_executable(test_${TARGET}
         tests/test_vec.cpp
         tests/test_quat.cpp
 )
-target_link_libraries(test_${TARGET} PRIVATE math gtest)
+target_link_libraries(test_${TARGET} PRIVATE math tnt_gtest)
 
 # ==================================================================================================
 # Benchmarks

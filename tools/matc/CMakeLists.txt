@@ -89,4 +89,4 @@ set(SRCS
 
 add_executable(${TARGET} ${SRCS})
 
-target_link_libraries(${TARGET} matlang gtest)
+target_link_libraries(${TARGET} matlang tnt_gtest)

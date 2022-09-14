@@ -47,7 +47,7 @@ if (TNT_DEV)
             filament_framegraph_test.cpp
             filament_test.cpp)
 
-    target_link_libraries(test_${TARGET} PRIVATE filament gtest)
+    target_link_libraries(test_${TARGET} PRIVATE filament tnt_gtest)
     target_compile_options(test_${TARGET} PRIVATE ${COMPILER_FLAGS})
 
     add_executable(test_depth depth_test.cpp)
@@ -57,6 +57,6 @@ endif()
 add_executable(test_material_parser
         filament_test_material_parser.cpp
         ${RESGEN_SOURCE})
-target_link_libraries(test_material_parser PRIVATE filament gtest)
+target_link_libraries(test_material_parser PRIVATE filament tnt_gtest)
 target_compile_options(test_material_parser PRIVATE ${COMPILER_FLAGS})
 target_include_directories(test_material_parser PRIVATE ${RESOURCE_DIR})
