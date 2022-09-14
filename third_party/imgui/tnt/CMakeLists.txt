@@ -31,4 +31,5 @@ set(SRCS
 
 add_library(${TARGET} STATIC ${PRIVATE_HDRS} ${PUBLIC_HDRS} ${SRCS})
 
-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR} ${PRIVATE_HDR_DIR})
+target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${PUBLIC_HDR_DIR}>)
+target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:${PRIVATE_HDR_DIR}>)

@@ -729,7 +729,7 @@ endif()
 
 install(TARGETS
         math matdbg meshoptimizer cgltf stb geometry tsl trie filamat
-        dracodec filaflat filabridge ibl-lite shaders backend_headers
+        dracodec filaflat filagui imgui filabridge ibl-lite shaders backend_headers
         civetweb glslang matdbg_resources SPIRV spirv-cross-glsl SPIRV-Tools-static
         smol-v SPIRV-Tools-opt OGLCompiler OSDependent spirv-cross-msl
         spirv-cross-core basis_transcoder ktxreader zstd
